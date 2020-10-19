@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/all.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: rgb(182, 218, 197);
+        overflow: hidden;
+        font-family: "Noto Sans TC", sans-serif;
+      }
+      #game {
+        width: 680px;
+        height: 70px;
+        position: absolute;
+        text-align: center;
+        top: 78%;
+        left: 50%;
+        transform: translate(-50%, 0);
+        display: inline-block;
+      }
+      .card {
+        width: 70px;
+        height: 70px;
+        transform-style: preserve-3d;
+        position: relative;
+        display: inline-block;
+        transition: all 0.8s;
+        margin-left: 10px;
+      }
+      .close {
+        transform: rotateY(180deg);
+      }
+      .front {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: absolute;
+        background-position: center;
+      }
+      .back {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url(./cards/back.png);
+        background-position: center;
+        position: absolute;
+        transform: rotateY(180deg);
+      }
+
+      .open {
+        opacity: 1;
+      }
+      .open.active {
+        opacity: 0.3;
+      }
+      .runMan {
+        width: 169px;
+        height: 294px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        position: absolute;
+        top: 15%;
+        left: 17%;
+      }
+      #box {
+        width: 150px;
+        height: 50px;
+        padding: 10px;
+        border-radius: 13% 13% 13% 13%/23% 23% 23% 23%;
+        background: rgb(0, 0, 0, 0.5);
+        opacity: 0;
+        position: relative;
+        transform: translate(50%, -120px);
+        display: inline-block;
+        color: white;
+        text-align: center;
+        line-height: 25px;
+        font-size: 10px;
+        z-index: 999;
+      }
+      #answer:hover + #box {
+        opacity: 1;
+      }
+      .cha {
+        width: 150px;
+        height: 263px;
+        box-sizing: border-box;
+        position: relative;
+        margin: 30px;
+        cursor: pointer;
+      }
+      #section1 span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-212.5px, 0);
+      }
+      .cha:hover {
+        border: 3px solid rgb(255, 255, 255, 0.7);
+        border-radius: 20% 20% 20% 20%/15% 15% 15% 15%;
+        background: url(./image/bg.png) no-repeat center center/cover;
+        box-shadow: 5px 5px 3px rgba(197, 197, 197, 0.5);
+      }
+      .word {
+        width: 150px;
+        height: 30px;
+        font-size: 14px;
+        color: rgba(11, 70, 47);
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        line-height: 30px;
+        display: none;
+        position: absolute;
+        top: 148.5px;
+        border-radius: 15% 15% 15% 15%/45% 45% 45% 45%;
+      }
+      .cha:hover + .word {
+        display: initial;
+      }
+      .po {
+        left: -150px;
+      }
+      #all {
+        width: 200px;
+        position: absolute;
+        text-align: center;
+        left: 50%;
+        top: 65%;
+        transform: translate(-50%, 0);
+      }
+      #all p {
+        position: relative;
+        display: inline-block;
+        padding-right: 20px;
+        color: rgba(11, 70, 47);
+      }
+      #all input {
+        position: relative;
+        display: inline-block;
+      }
+      #box2 {
+        width: 300px;
+        background: rgba(0, 0, 0, 0.5);
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        padding: 50px;
+        line-height: 16px;
+      }
+      #answer {
+        width: 50px;
+        height: 30px;
+        background: white;
+        border-radius: 13% 13% 13% 13%/23% 23% 23% 23%;
+        color: rgb(74, 104, 54);
+        border: none;
+        position: relative;
+        line-height: 30px;
+        text-align: center;
+        display: inline-block;
+      }
+      #sideTitle {
+        width: 200px;
+        height: 40px;
+        color: rgba(11, 70, 47);
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 13% 13% 13% 13%/40% 40% 40% 40%;
+        text-align: center;
+        position: absolute;
+        line-height: 40px;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+      #title img {
+        width: 800px;
+        height: 200px;
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translate(-50%, 0);
+      }
+      #bg{
+        position: absolute;
+        z-index: -999;
+        left:8%;
+        top: 25%;
+      }
+      .point{
+        position: relative;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="section1">
+      <div id="title"><img src="./image/title.png" /></div>
+      <p id="sideTitle">請選擇人物</p>
+      <span>
+        <img src="./image/girl.png" class="cha girl" />
+        <div class="word po">唉唉要選我嗎?</div>
+        <img src="./image/boy.png" class="cha boy" title="dss" />
+        <div class="word">今天也是新的一天!</div>
+      </span>
+    </div>
+
+    <div id="section2">
+      <div class="runMan"></div>
+      <div id="bg">
+        <img src="./image/points0.png" class="point">
+        <img src="./image/points1.png" class="point">
+        <img src="./image/points2.png" class="point">
+        <img src="./image/points3.png" class="point">
+        <img src="./image/points4.png" class="point">
+      </div>
+      <div id="all">
+        <p>次數 <span id="roundTimes"></span></p>
+        <div id="answer"><i class="far fa-eye"></i></div>
+        <div id="box">看了答案就不算運氣了啦！會有懲罰降臨喔</div>
+        <br />
+      </div>
+      <div id="game"></div>
+      <div id="box2"></div>
+    </div>
+    <script src="./jquery-3.5.1.min.js"></script>
+    <script>
+      $("#section2").css("display", "none");
+      $("#section2").attr("disabled", true);
+      $("#box2").css("display", "none");
+
+      const totalcards = 8;
+      let round = 0;
+      let clickAnswer = 0;
+
+      $(".girl").click(function () {
+        $("#section1").css("display", "none");
+        $("#section1").attr("disabled", true);
+        $("#section2").css("display", "initial");
+        $("#section2").attr("disabled", false);
+        $("#roundTimes").text(round);
+        $(".runMan").css("background-image", `url(./image/girl.png)`);
+
+        for (let i = 0; i < totalcards; i++) {
+          $("#game").append(`
+            <div class="card close">
+            <div class="back open"></div>
+            <div class="front"></div>
+        </div>
+            `);
+
+          const number = (i % (totalcards / 2)) + 1;
+          $(".card").eq(i).find(".front").css("background-image", `url(./cards/${number}S.png)`);
+          $(".card").eq(i).attr("data-num", number);
+
+          const target = Math.floor(Math.random() * $(".card").length);
+          $(".card").eq(target).insertAfter($(".card").eq(i));
+        }
+
+        $("#answer").on("click", $(".card .back"), function () {
+          $(".runMan").animate({ left: "9%" }, 800);
+          $(".open").toggleClass("active");
+          clickAnswer++;
+        });
+
+        $("#game").on("click", ".card", function () {
+          if ($(".card:not(.close)").length < 2) {
+            $(this).removeClass("close");
+          }
+
+          if ($(".card:not(.close)").length == 2) {
+            round++;
+            $("#roundTimes").text(round);
+            if (
+              $(".card:not(.close)").eq(0).attr("data-num") ==
+              $(".card:not(.close)").eq(1).attr("data-num")
+            ) {
+              $(".card:not(.close)").fadeTo(800, 0.3).addClass("clear").css("z-index", "-999");
+              $(".runMan").animate({ left: "+=15%" }, 400);
+            }
+
+            setTimeout(() => {
+              $(".card:not(.close)").addClass("close");
+            }, 1000);
+          }
+
+          if ($(".clear").length == totalcards) {
+            $("#answer").attr("disabled", true);
+            if (round > 5 && round < 8) {
+              if (clickAnswer == 0) {
+                $("#box2").css("display", "initial").text("今天的你很幸運喔，可以試試新事物~");
+              }
+              if (clickAnswer > 0) {
+                $("#box2")
+                  .css("display", "initial")
+                  .text("如果你連續兩餐吃到同一道菜，一定是因為你看了答案啦!");
+              }
+            } else if (round <= 5) {
+              if (clickAnswer == 0) {
+                $("#box2").css("display", "initial").text("今天超級幸運的喔!一定可以遇到好事!");
+              }
+              if (clickAnswer > 0) {
+                $("#box2").css("display", "initial").text("還不錯幸運，不過你看了答案對吧?");
+              }
+            } else if (round >= 8) {
+              if (clickAnswer == 0) {
+                $("#box2")
+                  .css("display", "initial")
+                  .text("雖然花了很多時間.....不用擔心，保持輕鬆快樂好運就直直升啦!");
+              }
+              if (clickAnswer > 0) {
+                $("#box2").css("display", "initial").text("都開答案了就要好好看好好按啦!");
+              }
+            }
+          }
+        });
+      });
+      $(".boy").click(function () {
+        $("#section1").css("display", "none");
+        $("#section1").attr("disabled", true);
+        $("#section2").css("display", "initial");
+        $("#section2").attr("disabled", false);
+        $("#roundTimes").text(round);
+        $(".runMan").css("background-image", `url(./image/boy.png)`);
+
+        for (let i = 0; i < totalcards; i++) {
+          $("#game").append(`
+            <div class="card close">
+            <div class="back open"></div>
+            <div class="front"></div>
+        </div>
+            `);
+
+          const number = (i % (totalcards / 2)) + 1;
+          $(".card").eq(i).find(".front").css("background-image", `url(./cards/${number}S.png)`);
+          $(".card").eq(i).attr("data-num", number);
+
+          const target = Math.floor(Math.random() * $(".card").length);
+          $(".card").eq(target).insertAfter($(".card").eq(i));
+        }
+
+        $("#answer").on("click", $(".card .back"), function () {
+          $(".runMan").animate({ left: "9%" }, 800);
+          $(".open").toggleClass("active");
+          clickAnswer++;
+        });
+
+        $("#game").on("click", ".card", function () {
+          if ($(".card:not(.close)").length < 2) {
+            $(this).removeClass("close");
+          }
+
+          if ($(".card:not(.close)").length == 2) {
+            round++;
+            $("#roundTimes").text(round);
+            if (
+              $(".card:not(.close)").eq(0).attr("data-num") ==
+              $(".card:not(.close)").eq(1).attr("data-num")
+            ) {
+              $(".card:not(.close)").fadeTo(800, 0.3).addClass("clear").css("z-index", "-999");
+              $(".runMan").animate({ left: "+=15%" }, 400);
+            }
+
+            setTimeout(() => {
+              $(".card:not(.close)").addClass("close");
+            }, 1000);
+          }
+
+          if ($(".clear").length == totalcards) {
+            $("#answer").attr("disabled", true);
+            if (round > 5 && round < 8) {
+              if (clickAnswer == 0) {
+                $("#box2").css("display", "initial").text("今天的你很幸運喔，可以試試新事物~");
+              }
+              if (clickAnswer > 0) {
+                $("#box2")
+                  .css("display", "initial")
+                  .text("如果你連續兩餐吃到同一道菜，一定是因為你看了答案啦!");
+              }
+            } else if (round <= 5) {
+              if (clickAnswer == 0) {
+                $("#box2").css("display", "initial").text("今天超級幸運的喔!一定可以遇到好事!");
+              }
+              if (clickAnswer > 0) {
+                $("#box2").css("display", "initial").text("還不錯幸運，不過你看了答案對吧?");
+              }
+            } else if (round >= 8) {
+              if (clickAnswer == 0) {
+                $("#box2")
+                  .css("display", "initial")
+                  .text("雖然花了很多時間.....不用擔心，保持輕鬆快樂好運就直直升啦!");
+              }
+              if (clickAnswer > 0) {
+                $("#box2").css("display", "initial").text("都開答案了就要好好看好好按啦!");
+              }
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
